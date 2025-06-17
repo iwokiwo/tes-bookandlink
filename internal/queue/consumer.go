@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"queue-management/internal/store"
 	Model "queue-management/model"
 	"regexp"
@@ -13,18 +14,37 @@ import (
 	"github.com/hibiken/asynq"
 )
 
-// type JobPayloadConsumer struct {
-// 	ID    string `json:"id"`
-// 	Email string `json:"email"`
-// }
-
 func isValidEmail(email string) bool {
 	re := regexp.MustCompile(`^[a-zA-Z0-9._%%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 	return re.MatchString(email)
 }
 
+//	func pingGoogle() error {
+//		client := http.Client{
+//			Timeout: 2 * time.Second,
+//		}
+//		// Simulasi timeout: alamat IP yang unreachable
+//		_, err := client.Get("http://10.255.255.1")
+//		return err
+//	}
+func pingURL(url string) error {
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+	resp, err := client.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	return nil
+}
+
 func NewJobHandler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
+		log.Println("Simulating network delay...")
+		time.Sleep(7 * time.Second) // delay simulasi lambat
+		log.Println("Finished simulated delay.")
+
 		var payload Model.Email
 		if err := json.Unmarshal(task.Payload(), &payload); err != nil {
 			return err
@@ -41,6 +61,17 @@ func NewJobHandler() asynq.HandlerFunc {
 				store.SaveJob(job)
 			}
 			return fmt.Errorf("invalid email")
+		}
+
+		// Ping ke URL yang dikirim dari Postman
+		if err := pingURL(payload.URL); err != nil {
+			log.Printf("Ping failed: %v", err)
+			if job, exists := store.GetJob(payload.ID); exists {
+				job.Status = "failed"
+				job.UpdatedAt = time.Now()
+				store.SaveJob(job)
+			}
+			return fmt.Errorf("ping failed: %v", err)
 		}
 
 		job, exists := store.GetJob(payload.ID)

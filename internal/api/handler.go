@@ -45,6 +45,7 @@ var AsynqClient *asynq.Client
 func PostJob(c *gin.Context) {
 	var req struct {
 		Email string `json:"email"`
+		URL   string `json:"url"`
 	}
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -61,7 +62,7 @@ func PostJob(c *gin.Context) {
 	}
 	store.SaveJob(job)
 
-	err := queue.EnqueueJob(AsynqClient, Model.Email{ID: id, Email: req.Email})
+	err := queue.EnqueueJob(AsynqClient, Model.Email{ID: id, Email: req.Email, URL: req.URL})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to enqueue"})
 		return
@@ -79,6 +80,7 @@ func RetryJob(c *gin.Context) {
 	id := c.Param("id")
 	var req struct {
 		Email string `json:"email"`
+		URL   string `json:"url"`
 	}
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -96,7 +98,7 @@ func RetryJob(c *gin.Context) {
 	job.UpdatedAt = time.Now()
 	store.SaveJob(job)
 
-	err := queue.EnqueueJob(AsynqClient, Model.Email{ID: job.ID, Email: job.Email})
+	err := queue.EnqueueJob(AsynqClient, Model.Email{ID: job.ID, Email: job.Email, URL: req.URL})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "re-enqueue failed"})
 		return
