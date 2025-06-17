@@ -11,6 +11,8 @@ import (
 	"github.com/hibiken/asynq"
 )
 
+const MaxConcurrency = 3
+
 func main() {
 	store.InitMemoryStore()
 	r := gin.Default()
@@ -35,10 +37,26 @@ func main() {
 	r.Run(":8080")
 }
 
+// func startWorker(redis asynq.RedisClientOpt) {
+// 	srv := asynq.NewServer(redis, asynq.Config{Concurrency: 10})
+// 	mux := asynq.NewServeMux()
+// 	mux.HandleFunc("process:job", queue.NewJobHandler())
+// 	if err := srv.Run(mux); err != nil {
+// 		panic(err)
+// 	}
+// }
+
 func startWorker(redis asynq.RedisClientOpt) {
-	srv := asynq.NewServer(redis, asynq.Config{Concurrency: 10})
+	srv := asynq.NewServer(redis, asynq.Config{
+		Concurrency: MaxConcurrency, //Gunakan batas maksimal di sini
+		Queues: map[string]int{
+			"default": 1, // Optional: atur prioritas queue jika kamu pakai lebih dari satu
+		},
+	})
+
 	mux := asynq.NewServeMux()
 	mux.HandleFunc("process:job", queue.NewJobHandler())
+
 	if err := srv.Run(mux); err != nil {
 		panic(err)
 	}
