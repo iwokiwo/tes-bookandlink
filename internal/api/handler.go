@@ -56,6 +56,7 @@ func PostJob(c *gin.Context) {
 	job := store.Job{
 		ID:        id,
 		Email:     req.Email,
+		URL:       req.URL,
 		Status:    "pending",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -94,6 +95,7 @@ func RetryJob(c *gin.Context) {
 	}
 
 	job.Email = req.Email
+	job.URL = req.URL
 	job.Status = "pending"
 	job.UpdatedAt = time.Now()
 	store.SaveJob(job)

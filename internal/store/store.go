@@ -8,6 +8,7 @@ import (
 type Job struct {
 	ID        string    `json:"id"`
 	Email     string    `json:"email"`
+	URL       string    `json:"url"`
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
