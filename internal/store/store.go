@@ -36,6 +36,12 @@ func GetJob(id string) (Job, bool) {
 	return job, ok
 }
 
+func ClearJobs() {
+	mu.Lock()
+	defer mu.Unlock()
+	jobStore = make(map[string]Job)
+}
+
 func GetAllJobs() []Job {
 	mu.RLock()
 	defer mu.RUnlock()

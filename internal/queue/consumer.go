@@ -34,7 +34,7 @@ func pingURL(url string) error {
 func NewJobHandler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
 		log.Println("Simulating network delay...")
-		time.Sleep(5 * time.Second) // delay simulasi lambat
+		time.Sleep(10 * time.Second) // delay simulasi lambat
 		log.Println("Finished simulated delay.")
 
 		var payload Model.Email

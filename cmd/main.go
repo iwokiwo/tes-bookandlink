@@ -27,6 +27,7 @@ func main() {
 	r.POST("/api/queue", api.PostJob)
 	r.GET("/api/queue", api.GetJobs)
 	r.POST("/api/queue/:id/retry", api.RetryJob)
+	r.DELETE("/api/queue", api.ClearJobList)
 	r.GET("/ws/logs", logstream.Handler)
 
 	go startWorker(redisConn)

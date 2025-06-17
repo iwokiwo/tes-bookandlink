@@ -80,3 +80,8 @@ func RetryJob(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, job)
 }
+
+func ClearJobList(c *gin.Context) {
+	store.ClearJobs()
+	c.JSON(http.StatusOK, gin.H{"message": "all jobs cleared"})
+}
