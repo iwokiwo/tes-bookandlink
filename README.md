@@ -54,25 +54,6 @@ To run ESLint on the codebase:
 npm run lint
 ```
 
-## 📁 Project Structure
-
-```
-.
-├── public/             # Static assets
-├── src/                # Source code
-│   ├── components/     # Reusable components
-│   ├── pages/          # Page components
-│   ├── store/          # Redux store configuration
-│   ├── hooks/          # Custom hooks
-│   ├── services/       # API service calls
-│   ├── App.tsx         # Main app component
-│   └── main.tsx        # Entry point
-├── .eslintrc.cjs       # ESLint config
-├── tsconfig.json       # TypeScript config
-├── vite.config.ts      # Vite config
-└── package.json
-```
-
 ## 🧪 Testing
 
 > Not yet implemented – consider integrating [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/).
