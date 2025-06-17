@@ -19,14 +19,6 @@ func isValidEmail(email string) bool {
 	return re.MatchString(email)
 }
 
-//	func pingGoogle() error {
-//		client := http.Client{
-//			Timeout: 2 * time.Second,
-//		}
-//		// Simulasi timeout: alamat IP yang unreachable
-//		_, err := client.Get("http://10.255.255.1")
-//		return err
-//	}
 func pingURL(url string) error {
 	client := http.Client{
 		Timeout: 5 * time.Second,
@@ -59,7 +51,7 @@ func NewJobHandler() asynq.HandlerFunc {
 				job.Status = "failed"
 				job.UpdatedAt = time.Now()
 				store.SaveJob(job)
-				//logstream.BroadcastJob(job) // Send job update
+				//logstream.BroadcastJob(job) // Send job update websocket
 			}
 			return fmt.Errorf("invalid email")
 		}
@@ -71,7 +63,7 @@ func NewJobHandler() asynq.HandlerFunc {
 				job.Status = "failed"
 				job.UpdatedAt = time.Now()
 				store.SaveJob(job)
-				//logstream.BroadcastJob(job) // Send job update
+				//logstream.BroadcastJob(job) // Send job update websocket
 			}
 			return fmt.Errorf("ping failed: %v", err)
 		}
