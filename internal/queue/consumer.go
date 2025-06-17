@@ -42,7 +42,7 @@ func pingURL(url string) error {
 func NewJobHandler() asynq.HandlerFunc {
 	return func(ctx context.Context, task *asynq.Task) error {
 		log.Println("Simulating network delay...")
-		time.Sleep(7 * time.Second) // delay simulasi lambat
+		time.Sleep(5 * time.Second) // delay simulasi lambat
 		log.Println("Finished simulated delay.")
 
 		var payload Model.Email
@@ -59,6 +59,7 @@ func NewJobHandler() asynq.HandlerFunc {
 				job.Status = "failed"
 				job.UpdatedAt = time.Now()
 				store.SaveJob(job)
+				//logstream.BroadcastJob(job) // Send job update
 			}
 			return fmt.Errorf("invalid email")
 		}
@@ -70,6 +71,7 @@ func NewJobHandler() asynq.HandlerFunc {
 				job.Status = "failed"
 				job.UpdatedAt = time.Now()
 				store.SaveJob(job)
+				//logstream.BroadcastJob(job) // Send job update
 			}
 			return fmt.Errorf("ping failed: %v", err)
 		}
