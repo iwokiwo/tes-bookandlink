@@ -66,6 +66,13 @@ Content-Type: application/json
 }
 ```
 
+### 📄 Delete Semua Job
+
+```http
+DELETE /api/queue
+```
+
+
 ## 🛠️ Struktur Proyek
 
 ```
