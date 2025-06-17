@@ -79,10 +79,13 @@ const addQueue = async () => {
     <>
       <Box display="flex" justifyContent="space-between" mt={2}>
         <Typography variant="h6" sx={{ m: 1 }}>
-          Queue List
+          Queue List 
         </Typography>
         <Box>
-            <TextField
+          <Typography variant="h6" sx={{ m: 1 }}>
+            maximum process 3 (thread)
+          </Typography>
+          <TextField
             label="Interval (ms) Add Queue"
             type="number"
             value={delayMs}
