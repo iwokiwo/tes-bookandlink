@@ -54,6 +54,26 @@ To run ESLint on the codebase:
 npm run lint
 ```
 
+## 📚 Sample Data
+
+Here is example data used in the application:
+- **Location File**: src/constans/form
+
+```ts
+export const dataQueue = [
+  { email: "john.doe@example.com", url: "http://www.google.com" },
+  { email: "alice99@mail.com", url: "http://www.google.com" },
+  { email: "test.user123@gmail.com", url: "http://www.google.com" },
+  { email: "randomguy@hotmail.com", url: "http://www.google.com" },
+  { email: "hello.world@domain.co", url: "http://www.google.com" },
+  { email: "foo.bar@testing.org", url: "http://www.google.com" },
+  { email: "janedoe987@yahoo.com", url: "http://www.google.com" },
+  { email: "contact@newmail.com", url: "http://www.google.com" },
+  { email: "support@service.tech", url: "http://www.googlessss.com" },
+  { email: "user1234@nowhere.net", url: "http://www.googless.com" }
+];
+```
+
 ## 🧪 Testing
 
 > Not yet implemented – consider integrating [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/).
