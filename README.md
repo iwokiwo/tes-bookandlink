@@ -22,7 +22,14 @@ maka sistem secara otomatis akan menandai status antrean tersebut sebagai "faile
 
 ## 🚀 Cara Menjalankan
 
-### 1. Jalankan Redis
+### 1. Setup project
+```bash
+git clone <repository-url>
+cd <folder-proyek>
+go mod tidy
+```
+
+### 2. Jalankan Redis
 
 Pastikan Redis sudah berjalan secara lokal di `localhost:6379`.  
 Jika belum punya, kamu bisa install atau gunakan Docker:
@@ -31,7 +38,7 @@ Jika belum punya, kamu bisa install atau gunakan Docker:
 docker run -p 6379:6379 redis
 ```
 
-### 2. Jalankan Aplikasi
+### 3. Jalankan Aplikasi
 
 ```bash
 go run main.go
