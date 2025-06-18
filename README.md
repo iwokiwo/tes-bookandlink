@@ -2,6 +2,11 @@
 
 Frontend project built with [React](https://reactjs.org/), [Vite](https://vitejs.dev/), [Material UI](https://mui.com/), [Redux Toolkit](https://redux-toolkit.js.org/), [React Hook Form](https://react-hook-form.com/), and [React Router](https://reactrouter.com/).
 
+# Penjelasan
+```
+Sistem ini tidak hanya memproses antrean (queue) secara efisien, tetapi juga secara dinamis mensimulasikan proses ping ke setiap URL dalam antrean. Jika ping ke URL tertentu gagal, maka sistem secara otomatis akan menandai status antrean tersebut sebagai "failed".
+```
+
 ## 🔧 Tech Stack
 
 - **Framework**: React 18 + Vite
