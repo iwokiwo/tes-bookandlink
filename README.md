@@ -23,6 +23,10 @@ Sistem ini tidak hanya memproses antrean (queue) secara efisien, tetapi juga sec
 ## 📦 Installation
 
 ```bash
+Delete file package-lock.json
+```
+
+```bash
 # Install dependencies
 npm install
 ```
