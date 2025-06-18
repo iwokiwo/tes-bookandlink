@@ -99,7 +99,6 @@ const addQueue = async () => {
             color="error"
             sx={{ m: 1 }}
             onClick={deleteQueue}
-            disabled={queue?.length === 0}
           >
             {isLoading ? <CircularProgress size={24} color="inherit" /> : "Delete Queue"}
           </Button>
@@ -107,7 +106,6 @@ const addQueue = async () => {
             variant="contained"
             sx={{ m: 1 }}
             onClick={addQueue}
-            disabled={queue!.length > 1 }
           >
             {isLoading ? <CircularProgress size={24} color="inherit" /> : "Add Queue"}
           </Button>
