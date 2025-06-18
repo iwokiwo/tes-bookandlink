@@ -5,6 +5,13 @@ Sistem manajemen antrean berbasis Go menggunakan:
 - [Asynq](https://github.com/hibiken/asynq) sebagai job/task queue
 - [Redis](https://redis.io/) sebagai message broker
 
+# Penjelasan
+```
+Sistem ini tidak hanya memproses antrean (queue) secara efisien, tetapi juga secara dinamis 
+mensimulasikan proses ping ke setiap URL dalam antrean. Jika ping ke URL tertentu gagal, 
+maka sistem secara otomatis akan menandai status antrean tersebut sebagai "failed".
+```
+
 ## 📦 Fitur
 
 - Menambahkan job ke antrean (`POST /api/queue`)
