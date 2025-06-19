@@ -14,13 +14,8 @@ import (
 
 var AsynqClient *asynq.Client
 
-type JobRequest struct {
-	Email string `json:"email"`
-	URL   string `json:"url"`
-}
-
 func PostJob(c *gin.Context) {
-	var req JobRequest
+	var req Model.JobRequest
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -28,7 +23,7 @@ func PostJob(c *gin.Context) {
 	}
 
 	id := uuid.New().String()
-	job := store.Job{
+	job := Model.Job{
 		ID:        id,
 		Email:     req.Email,
 		URL:       req.URL,
@@ -54,7 +49,7 @@ func GetJobs(c *gin.Context) {
 
 func RetryJob(c *gin.Context) {
 	id := c.Param("id")
-	var req JobRequest
+	var req Model.JobRequest
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
