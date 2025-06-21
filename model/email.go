@@ -15,6 +15,7 @@ type Job struct {
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	TaskID    string    `json:"task_id"`
 }
 
 type JobRequest struct {

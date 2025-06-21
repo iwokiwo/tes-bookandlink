@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 	"queue-management/internal/queue"
 	"queue-management/internal/store"
@@ -31,13 +32,14 @@ func PostJob(c *gin.Context) {
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-	store.SaveJob(job)
 
-	err := queue.EnqueueJob(AsynqClient, Model.Email{ID: id, Email: req.Email, URL: req.URL})
+	taskID, err := queue.EnqueueJob(AsynqClient, Model.Email{ID: id, Email: req.Email, URL: req.URL})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to enqueue"})
 		return
 	}
+	job.TaskID = taskID
+	store.SaveJob(job)
 
 	c.JSON(http.StatusOK, job)
 }
@@ -62,21 +64,45 @@ func RetryJob(c *gin.Context) {
 		return
 	}
 
+	err := store.DeleteTaskFromRedis(job.TaskID)
+	if err != nil {
+		log.Printf("Gagal hapus task %s: %v", job.TaskID, err)
+	} else {
+		log.Printf("Task %s berhasil dihapus dari Redis", job.TaskID)
+	}
+
 	job.Email = req.Email
 	job.URL = req.URL
 	job.Status = "pending"
 	job.UpdatedAt = time.Now()
-	store.SaveJob(job)
+	store.EditJob(job)
 
-	err := queue.EnqueueJob(AsynqClient, Model.Email{ID: job.ID, Email: job.Email, URL: req.URL})
+	taskID, err := queue.EnqueueJob(AsynqClient, Model.Email{ID: job.ID, Email: job.Email, URL: req.URL})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "re-enqueue failed"})
 		return
 	}
+	job.TaskID = taskID
+	store.EditJob(job)
+
 	c.JSON(http.StatusOK, job)
 }
 
 func ClearJobList(c *gin.Context) {
+	// 1. Ambil semua job dari memory store
+	jobs := store.GetAllJobs() // Kamu harus buat fungsi ini di store.go
+
+	// 2. Loop untuk hapus task dari Redis
+	for _, job := range jobs {
+		if job.TaskID != "" {
+			err := store.DeleteTaskFromRedis(job.TaskID)
+			if err != nil {
+				log.Printf("Gagal hapus task %s: %v", job.TaskID, err)
+			} else {
+				log.Printf("Task %s berhasil dihapus dari Redis", job.TaskID)
+			}
+		}
+	}
 	store.ClearJobs()
 	c.JSON(http.StatusOK, gin.H{"message": "all jobs cleared"})
 }

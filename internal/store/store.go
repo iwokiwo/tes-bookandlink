@@ -43,3 +43,15 @@ func GetAllJobs() []Model.Job {
 	}
 	return jobs
 }
+
+func EditJob(updatedJob Model.Job) bool {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if _, exists := jobStore[updatedJob.ID]; !exists {
+		return false
+	}
+
+	jobStore[updatedJob.ID] = updatedJob
+	return true
+}
